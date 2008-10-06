@@ -1,14 +1,13 @@
 ## Interface: 30000
-
 ## Title: basicAttitude
 ## Notes: LDB Attitude data feed
 ## Author: NightHawk The Sane
 ## Version: 1.0
 ## X-Email: nighthawkthesane@gmail.com
 ## X-Category: Misc
-## X-Credits: kergoth's PerfBlock
 
-LibStub.lua
-CallbackHandler-1.0.lua
-LibDataBroker-1.1\LibDataBroker-1.1.lua
+libs\LibStub.lua
+libs\CallbackHandler-1.0.lua
+libs\LibDataBroker-1.1.lua
+
 basicAttitude.lua
