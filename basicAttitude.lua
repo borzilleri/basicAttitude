@@ -10,9 +10,6 @@ local PITCH_MAX = 3.10668
 local DEGREE_MAX = 180
 local DEGREE_ZENITH = 90
 
-local pitchMax = 1.55334
-
-
 local function round(num, places)
   local mult = 10^(places or 0)
   return math_floor(num * mult + 0.5) / mult
@@ -44,13 +41,9 @@ f:SetScript("OnUpdate", function(self, elap)
 		pitch = pitch + 2*PITCH_MAX
 	end
 	
+	-- The absolute value of our pitch. Do this once here, so later on we're
+	-- not calling math_abs a bunch.
 	local pitch_abs = math_abs(pitch)
-	
-	-- This should be a decimal between -1 and 1.
-	-- 0 represents perfectly level foward pitch
-	-- 1 and -1 represent perfectly level upside-down pitch.
-	-- Positive numbers are pitch-up, negative numbers are pitch-down
-	--local fraction = pitch/PITCH_MAX
 	
 	-- This is the pitch in degrees. It should be a decimal between -180 and 180.
 	-- The numbers ought to be fairly self explanitory.
@@ -84,30 +77,6 @@ f:SetScript("OnUpdate", function(self, elap)
 			b = 1-(fractionOfZenith)
 		end
 	end
-	
-	
---	local fraction = pitch/pitchMax
---	local attitude = fraction * 90
---	
---	local r = 1; local g = 1; local b = 1;
---		
---	if( attitude > 0 ) then
---		if( fraction < .50 ) then
---			r = .50
---			b = .50
---		else
---			r = 1-fraction
---			b = 1-fraction
---		end
---	elseif( attitude < 0 ) then
---		if( fraction > -.50 ) then
---			g = .50
---			b = .50
---		else
---			g = 1-(fraction*-1)
---			b = 1-(fraction*-1)
---		end
---	end
 	
 	dataobj.text = string_format("|cff%02x%02x%02x%.5f|r°", r*255, g*255, b*255, attitude)
 end)
