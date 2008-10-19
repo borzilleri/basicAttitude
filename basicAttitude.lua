@@ -76,12 +76,13 @@ f:SetScript("OnUpdate", function(self, elap)
 		end		
 	elseif( pitch < 0 and pitch_abs < PITCH_MAX) then
 		-- Pitch-DOWN use Red Text. Only modify G and B values.
-		if( fractionOfZenith ) then
+		if( fractionOfZenith < .2) then
 			g = .8
 			b = .8
 		else
 			g = 1-(fractionOfZenith)
 			b = 1-(fractionOfZenith)
+		end
 	end
 	
 	
