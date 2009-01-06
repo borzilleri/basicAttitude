@@ -16,7 +16,7 @@ local function round(num, places)
 end
 
 local f = CreateFrame("frame")
-local dataobj = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject('basicAttitude', {text='+0', label='basicAttitude'})
+local dataobj = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject('basicAttitude', {type='data source', text='+0', label='basicAttitude'})
 
 f:SetScript("OnUpdate", function(self, elap)
 	elapsed = elapsed + elap
