@@ -23,7 +23,7 @@ f:SetScript("OnUpdate", function(self, elap)
 	if elapsed < UPDATE_PERIOD then return end
 	elapsed = 0
 	
-	local pitch = round(GetUnitPitch("player"),5)
+	local pitch = UnitInVehicle("player") == 1 and round(GetUnitPitch("playerpet"),5) or round(GetUnitPitch("player"),5)
 	
 	-- If the user pitches up far enough, they'll "roll over" to what is 
 	-- effectively a pitch-down attitude, but the pitch numbers returned by 
