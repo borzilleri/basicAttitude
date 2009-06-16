@@ -9,6 +9,7 @@ local PITCH_ZENITH = 1.55334
 local PITCH_MAX = 3.10668
 local DEGREE_MAX = 180
 local DEGREE_ZENITH = 90
+local RUN_SPEED = 7
 
 local function round(num, places)
   local mult = 10^(places or 0)
@@ -16,14 +17,25 @@ local function round(num, places)
 end
 
 local f = CreateFrame("frame")
-local dataobj = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject('basicAttitude', {type='data source', text='+0', label='basicAttitude'})
+local dataobj = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(
+	'basicAttitude', 
+	{type='data source', text='+0', label='basicAttitude'}
+)
 
 f:SetScript("OnUpdate", function(self, elap)
 	elapsed = elapsed + elap
 	if elapsed < UPDATE_PERIOD then return end
 	elapsed = 0
 	
-	local pitch = UnitInVehicle("player") == 1 and round(GetUnitPitch("playerpet"),5) or round(GetUnitPitch("player"),5)
+	local isFlying = IsFlying() or (UnitInVehicle("player") and GetUnitSpeed("playerpet") > RUN_SPEED*2)
+	
+	local speed_raw = UnitInVehicle("player") == 1 and
+		round(GetUnitSpeed("playerpet"),5) or round(GetUnitSpeed("player"),5)
+		
+	local pitch = UnitInVehicle("player") == 1 and 
+		round(GetUnitPitch("playerpet"),5) or round(GetUnitPitch("player"),5)
+	
+	local speed_percent = round((speed_raw/RUN_SPEED)*100, 5)
 	
 	-- If the user pitches up far enough, they'll "roll over" to what is 
 	-- effectively a pitch-down attitude, but the pitch numbers returned by 
@@ -53,7 +65,8 @@ f:SetScript("OnUpdate", function(self, elap)
 	-- It represents the fraction of zenith our pitch is (either positive or negative).
 	-- 0 represents horizontal flight
 	-- 1 represents vertical flight (up or down)
-	local fractionOfZenith = (pitch_abs > PITCH_ZENITH) and ((PITCH_MAX-pitch_abs)/PITCH_ZENITH) or (pitch_abs/PITCH_ZENITH)
+	local fractionOfZenith = (pitch_abs > PITCH_ZENITH) and 
+		((PITCH_MAX-pitch_abs)/PITCH_ZENITH) or (pitch_abs/PITCH_ZENITH)
 	
 	-- Initialize our RGB values.
 	local r,g,b = 1,1,1
@@ -78,5 +91,7 @@ f:SetScript("OnUpdate", function(self, elap)
 		end
 	end
 	
-	dataobj.text = string_format("|cff%02x%02x%02x%.5f|r°", r*255, g*255, b*255, attitude)
+	speed_percent = isFlying and (speed_percent * cos(attitude)) or speed_percent
+	
+	dataobj.text = string_format("|cff%02x%02x%02x%.5f|r° %.2f%%", r*255, g*255, b*255, attitude, speed_percent)
 end)
