@@ -1,4 +1,4 @@
-## Interface: 30000
+## Interface: 30200
 ## Title: basicAttitude
 ## Notes: LDB Attitude data feed
 ## Author: NightHawk The Sane
